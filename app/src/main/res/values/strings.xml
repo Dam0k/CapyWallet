@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">CapyWallet</string>
+    <string-array name="categories">
+        <item>Housing</item>
+        <item>Food</item>
+        <item>Transportation</item>
+        <item>Utilities</item>
+        <item>Entertainment</item>
+        <item>Income</item>
+        <item>Other</item>
+    </string-array>
+</resources>
