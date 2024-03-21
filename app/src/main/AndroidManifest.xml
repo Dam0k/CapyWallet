@@ -22,7 +22,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".Activity_2"
+            android:name=".AddExpense"
             android:exported="false"
             android:parentActivityName=".MainActivity" />
     </application>
