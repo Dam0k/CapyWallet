@@ -51,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
         expenses = dbHelper.getAllExpenses();
         ArrayList<String> expensesList = new ArrayList<>();
         for (Expense expense : expenses) {
-            expensesList.add(expense.getName() + " - $" + expense.getAmount() + " (" + expense.getCategory() + ")");
+            expensesList.add(expense.getName() + " - " + expense.getAmount() + " Kč (" + expense.getCategory() + ")");
         }
 
         ListView listView = findViewById(R.id.listView);
