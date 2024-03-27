@@ -74,4 +74,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.close();
         return expenseList;
     }
+
+    public int deleteExpense(long id) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        int deletedRows = db.delete(TABLE_EXPENSES, COLUMN_ID + " = ?", new String[]{String.valueOf(id)});
+        db.close();
+        return deletedRows;
+    }
+
+
 }
