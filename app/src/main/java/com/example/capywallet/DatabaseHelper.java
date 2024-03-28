@@ -13,14 +13,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "expenses.db";
     private static final int DATABASE_VERSION = 1;
 
-    // Expense table
     public static final String TABLE_EXPENSES = "expenses";
     public static final String COLUMN_ID = "_id";
     public static final String COLUMN_NAME = "name";
     public static final String COLUMN_AMOUNT = "amount";
     public static final String COLUMN_CATEGORY = "category";
 
-    // SQL statement to create the expense table
     private static final String CREATE_TABLE_EXPENSES = "CREATE TABLE " +
             TABLE_EXPENSES + "(" +
             COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +

@@ -13,6 +13,7 @@ import androidx.appcompat.widget.Toolbar;
 
 public class AddExpense extends AppCompatActivity {
     private DatabaseHelper dbHelper;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

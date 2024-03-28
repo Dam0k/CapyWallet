@@ -5,11 +5,12 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import androidx.appcompat.widget.Toolbar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -21,6 +22,8 @@ public class MainActivity extends AppCompatActivity {
     private ArrayAdapter<String> adapter;
     private List<Expense> expenses;
     private ListView listView;
+    private Button profileButton;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +45,15 @@ public class MainActivity extends AppCompatActivity {
         });
 
         displayExpenses();
+
+        profileButton = findViewById(R.id.profileButton);
+        profileButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent profileIntent = new Intent(MainActivity.this, Profile.class);
+                startActivity(profileIntent);
+            }
+        });
     }
 
     @Override
@@ -57,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
             expensesList.add(expense.getName() + " - " + expense.getAmount() + " Kč (" + expense.getCategory() + ")");
         }
 
-        listView = findViewById(R.id.listView); // Use the class-level listView variable
+        listView = findViewById(R.id.listView);
         adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, expensesList);
         listView.setAdapter(adapter);
 
@@ -74,16 +86,13 @@ public class MainActivity extends AppCompatActivity {
         if (position >= 0 && position < expenses.size()) {
             Expense expenseToDelete = expenses.get(position);
             dbHelper.deleteExpense(expenseToDelete.getId());
-            // Fetch the updated list of expenses from the database
             expenses = dbHelper.getAllExpenses();
-            // Update the ListView with the updated list of expenses
             updateListView(expenses);
         } else {
             Toast.makeText(this, "Invalid expense", Toast.LENGTH_SHORT).show();
         }
     }
 
-    // Method to update the ListView with a new list of expenses
     private void updateListView(List<Expense> updatedExpenses) {
         ArrayList<String> expensesList = new ArrayList<>();
         for (Expense expense : updatedExpenses) {
