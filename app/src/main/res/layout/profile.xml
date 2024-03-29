@@ -18,27 +18,23 @@
 
     <ImageView
         android:id="@+id/profileImageView"
-        android:layout_width="335dp"
-        android:layout_height="356dp"
+        android:layout_width="match_parent"
+        android:layout_height="400dp"
         android:layout_centerHorizontal="true"
-        android:src="@drawable/default_profile_image"
-        app:layout_constraintBottom_toTopOf="@+id/takePhotoButton"
+        android:src="@drawable/capybara"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolbar"
-        app:layout_constraintVertical_bias="0.5" />
+        app:layout_constraintVertical_bias="0.1" />
 
     <Button
         android:id="@+id/takePhotoButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/profileImageView"
-        android:layout_centerHorizontal="true"
         android:text="Take Photo"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/profileImageView"
-        app:layout_constraintVertical_bias="0.497" />
+        app:layout_constraintTop_toBottomOf="@id/profileImageView" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

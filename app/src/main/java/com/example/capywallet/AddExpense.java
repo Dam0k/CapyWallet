@@ -26,11 +26,7 @@ public class AddExpense extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         Spinner spinner = (Spinner) findViewById(R.id.categories);
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
-                this,
-                R.array.categories,
-                android.R.layout.simple_spinner_item
-        );
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.categories, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
 
@@ -44,8 +40,25 @@ public class AddExpense extends AppCompatActivity {
     }
 
     private void saveExpense() {
-        String name = ((EditText) findViewById(R.id.editTextText)).getText().toString();
-        double amount = Double.parseDouble(((EditText) findViewById(R.id.editTextNumber)).getText().toString());
+        EditText nameEditText = findViewById(R.id.editTextText);
+        EditText amountEditText = findViewById(R.id.editTextNumber);
+
+        String name = nameEditText.getText().toString().trim();
+        String amountString = amountEditText.getText().toString().trim();
+
+        if (name.isEmpty() || amountString.isEmpty()) {
+            Toast.makeText(this, "Please fill out all fields", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        double amount;
+        try {
+            amount = Double.parseDouble(amountString);
+        } catch (NumberFormatException e) {
+            Toast.makeText(this, "Invalid amount", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         String category = ((Spinner) findViewById(R.id.categories)).getSelectedItem().toString();
 
         Expense expense = new Expense();
@@ -61,6 +74,7 @@ public class AddExpense extends AppCompatActivity {
             Toast.makeText(this, "Failed to add expense", Toast.LENGTH_SHORT).show();
         }
     }
+
 
     @Override
     public boolean onSupportNavigateUp() {
