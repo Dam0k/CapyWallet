@@ -1,5 +1,6 @@
 package com.example.capywallet;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -7,8 +8,10 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
@@ -18,11 +21,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
+    private static final int REQUEST_CODE_PROFILE = 101;
+
     private DatabaseHelper dbHelper;
     private ArrayAdapter<String> adapter;
     private List<Expense> expenses;
     private ListView listView;
     private Button profileButton;
+    private TextView budgetAmount;
 
 
     @Override
@@ -44,6 +50,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+
         displayExpenses();
 
         profileButton = findViewById(R.id.profileButton);
@@ -54,13 +61,36 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(profileIntent);
             }
         });
+        profileButton = findViewById(R.id.profileButton);
+        profileButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent profileIntent = new Intent(MainActivity.this, Profile.class);
+                startActivityForResult(profileIntent, REQUEST_CODE_PROFILE);
+            }
+        });
+
+        budgetAmount = findViewById(R.id.budgetAmount);
+        updateBudgetAmount();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+        updateBudgetAmount();
         displayExpenses();
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_CODE_PROFILE && resultCode == Activity.RESULT_OK) {
+            // Update the budget amount
+            updateBudgetAmount();
+            Toast.makeText(this, "Income saved successfully", Toast.LENGTH_SHORT).show();
+        }
+    }
+
 
     private void displayExpenses() {
         expenses = dbHelper.getAllExpenses();
@@ -101,6 +131,15 @@ public class MainActivity extends AppCompatActivity {
         adapter.clear();
         adapter.addAll(expensesList);
         adapter.notifyDataSetChanged();
+    }
+
+    private void updateBudgetAmount() {
+        double income = dbHelper.getIncome();
+        if (income != -1) {
+            budgetAmount.setText(String.valueOf(income));
+        } else {
+            budgetAmount.setText("0");
+        }
     }
 
 

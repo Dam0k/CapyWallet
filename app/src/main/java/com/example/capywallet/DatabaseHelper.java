@@ -23,6 +23,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String COLUMN_IMAGE_ID = "_id";
     public static final String COLUMN_IMAGE_DATA = "image_data";
 
+    public static final String TABLE_INCOME = "income";
+    public static final String COLUMN_INCOME_ID = "_id";
+    public static final String COLUMN_INCOME_AMOUNT = "amount";
+
     private static final String CREATE_TABLE_EXPENSES = "CREATE TABLE " +
             TABLE_EXPENSES + "(" +
             COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
@@ -37,6 +41,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             COLUMN_IMAGE_DATA + " BLOB" +
             ")";
 
+    private static final String CREATE_TABLE_INCOME = "CREATE TABLE " +
+            TABLE_INCOME + "(" +
+            COLUMN_INCOME_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+            COLUMN_INCOME_AMOUNT + " REAL" +
+            ")";
+
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
@@ -45,13 +55,37 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(CREATE_TABLE_EXPENSES);
         db.execSQL(CREATE_TABLE_IMAGES);
+        db.execSQL(CREATE_TABLE_INCOME);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_EXPENSES);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_IMAGES);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_INCOME);
         onCreate(db);
+    }
+
+    public double getIncome() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query = "SELECT * FROM " + TABLE_INCOME;
+        Cursor cursor = db.rawQuery(query, null);
+        double income = -1;
+        if (cursor.moveToFirst()) {
+            income = cursor.getDouble(cursor.getColumnIndex(COLUMN_INCOME_AMOUNT));
+        }
+        cursor.close();
+        db.close();
+        return income;
+    }
+
+    public long saveIncome(double income) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_INCOME_AMOUNT, income);
+        long id = db.insert(TABLE_INCOME, null, values);
+        db.close();
+        return id;
     }
 
     public long addExpense(Expense expense) {
@@ -125,6 +159,28 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
         db.close();
         return lastImageId;
+    }
+
+    public long getExistingIncomeId() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query = "SELECT " + COLUMN_INCOME_ID + " FROM " + TABLE_INCOME;
+        Cursor cursor = db.rawQuery(query, null);
+        long incomeId = -1;
+        if (cursor.moveToFirst()) {
+            incomeId = cursor.getLong(cursor.getColumnIndex(COLUMN_INCOME_ID));
+        }
+        cursor.close();
+        db.close();
+        return incomeId;
+    }
+
+    public int updateIncome(long incomeId, double income) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_INCOME_AMOUNT, income);
+        int rowsAffected = db.update(TABLE_INCOME, values, COLUMN_INCOME_ID + " = ?", new String[]{String.valueOf(incomeId)});
+        db.close();
+        return rowsAffected;
     }
 
 

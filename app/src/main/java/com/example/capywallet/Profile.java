@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -28,6 +29,8 @@ public class Profile extends AppCompatActivity {
     private Button takePhotoButton;
     private DatabaseHelper dbHelper;
     private long imageId = -1; // Default value to indicate no image
+    private EditText editTextIncome;
+    private Button saveIncomeButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +66,16 @@ public class Profile extends AppCompatActivity {
                 } else {
                     requestCameraPermission();
                 }
+            }
+        });
+
+        editTextIncome = findViewById(R.id.editTextIncome);
+        saveIncomeButton = findViewById(R.id.saveIncomeButton);
+
+        saveIncomeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                saveIncomeToDatabase();
             }
         });
     }
@@ -123,6 +136,38 @@ public class Profile extends AppCompatActivity {
             }
         }
     }
+
+    private void saveIncomeToDatabase() {
+        String incomeText = editTextIncome.getText().toString();
+        if (!incomeText.isEmpty()) {
+            double income = Double.parseDouble(incomeText);
+            long existingIncomeId = dbHelper.getExistingIncomeId(); // Add this method to DatabaseHelper
+            if (existingIncomeId != -1) {
+                // If income already exists, update it
+                int rowsAffected = dbHelper.updateIncome(existingIncomeId, income);
+                if (rowsAffected > 0) {
+                    Toast.makeText(this, "Income updated successfully", Toast.LENGTH_SHORT).show();
+                    setResult(RESULT_OK);
+                    finish();
+                } else {
+                    Toast.makeText(this, "Failed to update income", Toast.LENGTH_SHORT).show();
+                }
+            } else {
+                // If income doesn't exist, save it
+                long incomeId = dbHelper.saveIncome(income);
+                if (incomeId != -1) {
+                    Toast.makeText(this, "Income saved successfully", Toast.LENGTH_SHORT).show();
+                    setResult(RESULT_OK);
+                    finish();
+                } else {
+                    Toast.makeText(this, "Failed to save income", Toast.LENGTH_SHORT).show();
+                }
+            }
+        } else {
+            Toast.makeText(this, "Please enter income", Toast.LENGTH_SHORT).show();
+        }
+    }
+
 
     @Override
     public boolean onSupportNavigateUp() {
