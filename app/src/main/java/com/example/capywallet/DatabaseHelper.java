@@ -19,12 +19,22 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String COLUMN_AMOUNT = "amount";
     public static final String COLUMN_CATEGORY = "category";
 
+    public static final String TABLE_IMAGES = "images";
+    public static final String COLUMN_IMAGE_ID = "_id";
+    public static final String COLUMN_IMAGE_DATA = "image_data";
+
     private static final String CREATE_TABLE_EXPENSES = "CREATE TABLE " +
             TABLE_EXPENSES + "(" +
             COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
             COLUMN_NAME + " TEXT, " +
             COLUMN_AMOUNT + " REAL, " +
             COLUMN_CATEGORY + " TEXT" +
+            ")";
+
+    private static final String CREATE_TABLE_IMAGES = "CREATE TABLE " +
+            TABLE_IMAGES + "(" +
+            COLUMN_IMAGE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+            COLUMN_IMAGE_DATA + " BLOB" +
             ")";
 
     public DatabaseHelper(Context context) {
@@ -34,11 +44,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(CREATE_TABLE_EXPENSES);
+        db.execSQL(CREATE_TABLE_IMAGES);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_EXPENSES);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_IMAGES);
         onCreate(db);
     }
 
@@ -78,6 +90,41 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         int deletedRows = db.delete(TABLE_EXPENSES, COLUMN_ID + " = ?", new String[]{String.valueOf(id)});
         db.close();
         return deletedRows;
+    }
+
+    public long saveImage(byte[] imageData) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_IMAGE_DATA, imageData);
+        long id = db.insert(TABLE_IMAGES, null, values);
+        db.close();
+        return id;
+    }
+
+    public byte[] getImage(long imageId) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.query(TABLE_IMAGES, new String[]{COLUMN_IMAGE_DATA}, COLUMN_IMAGE_ID + " = ?",
+                new String[]{String.valueOf(imageId)}, null, null, null, null);
+        byte[] imageData = null;
+        if (cursor != null && cursor.moveToFirst()) {
+            imageData = cursor.getBlob(cursor.getColumnIndex(COLUMN_IMAGE_DATA));
+            cursor.close();
+        }
+        db.close();
+        return imageData;
+    }
+
+    public long getLastImageId() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.query(TABLE_IMAGES, new String[]{COLUMN_IMAGE_ID}, null, null,
+                null, null, COLUMN_IMAGE_ID + " DESC", "1");
+        long lastImageId = -1;
+        if (cursor != null && cursor.moveToFirst()) {
+            lastImageId = cursor.getLong(cursor.getColumnIndex(COLUMN_IMAGE_ID));
+            cursor.close();
+        }
+        db.close();
+        return lastImageId;
     }
 
 

@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.View;
@@ -18,16 +19,22 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import java.io.ByteArrayOutputStream;
+
 public class Profile extends AppCompatActivity {
     private static final int REQUEST_IMAGE_CAPTURE = 101;
     private static final int PERMISSION_REQUEST_CAMERA = 102;
     private ImageView profileImageView;
     private Button takePhotoButton;
+    private DatabaseHelper dbHelper;
+    private long imageId = -1; // Default value to indicate no image
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.profile);
+
+        dbHelper = new DatabaseHelper(this);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -35,6 +42,18 @@ public class Profile extends AppCompatActivity {
 
         profileImageView = findViewById(R.id.profileImageView);
         takePhotoButton = findViewById(R.id.takePhotoButton);
+
+        // Retrieve the imageId if it was saved previously
+        imageId = dbHelper.getLastImageId();
+
+        // Load the image if an imageId is available
+        if (imageId != -1) {
+            byte[] imageData = dbHelper.getImage(imageId);
+            if (imageData != null) {
+                Bitmap bitmap = BitmapFactory.decodeByteArray(imageData, 0, imageData.length);
+                profileImageView.setImageBitmap(bitmap);
+            }
+        }
 
         takePhotoButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -82,6 +101,26 @@ public class Profile extends AppCompatActivity {
             Bundle extras = data.getExtras();
             Bitmap imageBitmap = (Bitmap) extras.get("data");
             profileImageView.setImageBitmap(imageBitmap);
+
+            // Save the captured image to the database
+            saveImageToDatabase(imageBitmap);
+        }
+    }
+
+    private void saveImageToDatabase(Bitmap imageBitmap) {
+        if (imageBitmap != null) {
+            // Convert Bitmap to byte array
+            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+            imageBitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+            byte[] byteArray = stream.toByteArray();
+
+            // Save byte array to database and get the image id
+            imageId = dbHelper.saveImage(byteArray);
+            if (imageId != -1) {
+                Toast.makeText(this, "Image saved successfully", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, "Failed to save image", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 
