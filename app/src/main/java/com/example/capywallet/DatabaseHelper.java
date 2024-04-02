@@ -27,25 +27,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String COLUMN_INCOME_ID = "_id";
     public static final String COLUMN_INCOME_AMOUNT = "amount";
 
-    private static final String CREATE_TABLE_EXPENSES = "CREATE TABLE " +
-            TABLE_EXPENSES + "(" +
-            COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-            COLUMN_NAME + " TEXT, " +
-            COLUMN_AMOUNT + " REAL, " +
-            COLUMN_CATEGORY + " TEXT" +
-            ")";
+    private static final String CREATE_TABLE_EXPENSES = "CREATE TABLE " + TABLE_EXPENSES + "(" + COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + COLUMN_NAME + " TEXT, " + COLUMN_AMOUNT + " REAL, " + COLUMN_CATEGORY + " TEXT" + ")";
 
-    private static final String CREATE_TABLE_IMAGES = "CREATE TABLE " +
-            TABLE_IMAGES + "(" +
-            COLUMN_IMAGE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-            COLUMN_IMAGE_DATA + " BLOB" +
-            ")";
+    private static final String CREATE_TABLE_IMAGES = "CREATE TABLE " + TABLE_IMAGES + "(" + COLUMN_IMAGE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + COLUMN_IMAGE_DATA + " BLOB" + ")";
 
-    private static final String CREATE_TABLE_INCOME = "CREATE TABLE " +
-            TABLE_INCOME + "(" +
-            COLUMN_INCOME_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
-            COLUMN_INCOME_AMOUNT + " REAL" +
-            ")";
+    private static final String CREATE_TABLE_INCOME = "CREATE TABLE " + TABLE_INCOME + "(" + COLUMN_INCOME_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + COLUMN_INCOME_AMOUNT + " REAL" + ")";
 
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -137,8 +123,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public byte[] getImage(long imageId) {
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.query(TABLE_IMAGES, new String[]{COLUMN_IMAGE_DATA}, COLUMN_IMAGE_ID + " = ?",
-                new String[]{String.valueOf(imageId)}, null, null, null, null);
+        Cursor cursor = db.query(TABLE_IMAGES, new String[]{COLUMN_IMAGE_DATA}, COLUMN_IMAGE_ID + " = ?", new String[]{String.valueOf(imageId)}, null, null, null, null);
         byte[] imageData = null;
         if (cursor != null && cursor.moveToFirst()) {
             imageData = cursor.getBlob(cursor.getColumnIndex(COLUMN_IMAGE_DATA));
@@ -150,8 +135,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public long getLastImageId() {
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.query(TABLE_IMAGES, new String[]{COLUMN_IMAGE_ID}, null, null,
-                null, null, COLUMN_IMAGE_ID + " DESC", "1");
+        Cursor cursor = db.query(TABLE_IMAGES, new String[]{COLUMN_IMAGE_ID}, null, null, null, null, COLUMN_IMAGE_ID + " DESC", "1");
         long lastImageId = -1;
         if (cursor != null && cursor.moveToFirst()) {
             lastImageId = cursor.getLong(cursor.getColumnIndex(COLUMN_IMAGE_ID));
@@ -183,5 +167,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return rowsAffected;
     }
 
-
+    public double getTotalExpenses() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query = "SELECT SUM(" + COLUMN_AMOUNT + ") FROM " + TABLE_EXPENSES;
+        Cursor cursor = db.rawQuery(query, null);
+        double totalExpenses = 0;
+        if (cursor.moveToFirst()) {
+            totalExpenses = cursor.getDouble(0);
+        }
+        cursor.close();
+        db.close();
+        return totalExpenses;
+    }
 }

@@ -20,6 +20,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.util.ArrayList;
 import java.util.List;
 
+
 public class MainActivity extends AppCompatActivity {
     private static final int REQUEST_CODE_PROFILE = 101;
 
@@ -53,14 +54,6 @@ public class MainActivity extends AppCompatActivity {
 
         displayExpenses();
 
-        profileButton = findViewById(R.id.profileButton);
-        profileButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent profileIntent = new Intent(MainActivity.this, Profile.class);
-                startActivity(profileIntent);
-            }
-        });
         profileButton = findViewById(R.id.profileButton);
         profileButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -118,10 +111,14 @@ public class MainActivity extends AppCompatActivity {
             dbHelper.deleteExpense(expenseToDelete.getId());
             expenses = dbHelper.getAllExpenses();
             updateListView(expenses);
+
+            // Recalculate remaining budget
+            updateBudgetAmount();
         } else {
             Toast.makeText(this, "Invalid expense", Toast.LENGTH_SHORT).show();
         }
     }
+
 
     private void updateListView(List<Expense> updatedExpenses) {
         ArrayList<String> expensesList = new ArrayList<>();
@@ -135,10 +132,16 @@ public class MainActivity extends AppCompatActivity {
 
     private void updateBudgetAmount() {
         double income = dbHelper.getIncome();
-        if (income != -1) {
-            budgetAmount.setText(String.valueOf(income));
+        double totalExpenses = dbHelper.getTotalExpenses(); // Add this method to DatabaseHelper
+        double remainingBudget = income - totalExpenses;
+
+        budgetAmount.setText(String.valueOf(remainingBudget));
+
+        // Set text color based on remaining budget
+        if (remainingBudget < 0) {
+            budgetAmount.setTextColor(getResources().getColor(R.color.negative_balance));
         } else {
-            budgetAmount.setText("0");
+            budgetAmount.setTextColor(getResources().getColor(R.color.app_color));
         }
     }
 
