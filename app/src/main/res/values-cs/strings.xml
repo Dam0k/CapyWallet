@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">CapyWallet</string>
+    <string name="profileButton">Profil</string>
+    <string name="budget">"Rozpočet: "</string>
+    <string name="add_expense">Přidat výdaj</string>
+    <string name="name">Název</string>
+    <string name="enter_name">Zadejte název</string>
+    <string name="amount">Částka</string>
+    <string name="enter_amount">Zadejte částku</string>
+    <string name="add">Přidat</string>
+    <string name="profile">Profil</string>
+    <string name="take_photo">Vyfotit</string>
+    <string name="income">Příjem</string>
+    <string name="monthly_income">Zadejte měsíční příjem</string>
+    <string name="save_income">Uložit příjem</string>
+</resources>
