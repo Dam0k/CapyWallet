@@ -2,7 +2,7 @@
 <resources>
     <string name="app_name">CapyWallet</string>
     <string name="profileButton">Profil</string>
-    <string name="budget">"Rozpočet: "</string>
+    <string name="budget">Rozpočet</string>
     <string name="add_expense">Přidat výdaj</string>
     <string name="name">Název</string>
     <string name="enter_name">Zadejte název</string>
@@ -14,4 +14,5 @@
     <string name="income">Příjem</string>
     <string name="monthly_income">Zadejte měsíční příjem</string>
     <string name="save_income">Uložit příjem</string>
+    <string name="category">Kategorie</string>
 </resources>
