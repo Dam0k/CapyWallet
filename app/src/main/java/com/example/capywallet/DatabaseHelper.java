@@ -56,7 +56,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
         String query = "SELECT * FROM " + TABLE_INCOME;
         Cursor cursor = db.rawQuery(query, null);
-        double income = -1;
+        double income = 0;
         if (cursor.moveToFirst()) {
             income = cursor.getDouble(cursor.getColumnIndex(COLUMN_INCOME_AMOUNT));
         }
