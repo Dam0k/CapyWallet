@@ -168,7 +168,6 @@ public class Profile extends AppCompatActivity {
         }
     }
 
-
     @Override
     public boolean onSupportNavigateUp() {
         onBackPressed();

@@ -42,7 +42,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/profileImageView" />
 
-
     <TextView
         android:id="@+id/incomeLabel"
         android:layout_width="wrap_content"
