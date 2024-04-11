@@ -34,6 +34,7 @@ Vsechny vstupy jsou osetreny aby uzivatel nemohu zadat spatne nebo zadne hodnoty
 
 _________________________________________________________________________________
 **Technicka ukazka:**
+
 **MainActivity**
 Deklarace proměnných: Definuje proměnné pro ovládací prvky rozhraní (ListView, Button, TextView), správce databáze (DatabaseHelper) a další pomocné proměnné.
 
@@ -52,6 +53,7 @@ Metoda updateListView(): Aktualizuje zobrazený seznam výdajů po provedení zm
 Metoda updateBudgetAmount(): Aktualizuje zobrazený rozpočet na základě uloženého příjmu a celkových výdajů. Nastavuje také barvu textu podle zbývajícího rozpočtu.
 
 **DatabaseHelper.java**
+
 Definice konstant a proměnných: Obsahuje definice názvů databáze, tabulek a sloupců, jakož i verze databáze.
 
 Metody onCreate a onUpgrade: Tyto metody jsou volány při vytváření nebo aktualizaci databáze. onCreate vytváří tabulky, zatímco onUpgrade odstraňuje staré tabulky a vytváří nové.
@@ -67,6 +69,7 @@ Zpracování výsledků dotazů: Výsledky dotazů jsou zpracovány a použity k
 Správa spojení s databází: Metody otevírají a zavírají spojení s databází, aby se zabránilo úniku paměti a zbytečné spotřebě zdrojů.
 
 **AddExpense**
+
 Deklarace Třídy: Třída AddExpense rozšiřuje AppCompatActivity, což naznačuje, že je to aktivita v Android aplikaci.
 
 Metoda onCreate(): Tato metoda je volána při prvním vytvoření aktivity. Inicializuje rozložení aktivity z XML souboru add_expense.xml, nastaví toolbar, naplní spinner (rozbalovací menu) kategoriemi a nastaví onClickListener pro tlačítko "Přidat".
@@ -76,6 +79,7 @@ Metoda saveExpense(): Tato metoda je volána po kliknutí na tlačítko "Přidat
 Metoda onSupportNavigateUp(): Tato metoda je volána, když uživatel stiskne tlačítko Zpět v toolbaru. Jednoduše volá onBackPressed() pro navigaci zpět.
 
 **Profile**
+
 Proměnné: Jsou deklarovány různé proměnné, včetně zobrazení obrázků, tlačítek, pomocníka pro práci s databází a identifikátoru obrázku. Tyto proměnné slouží k interakci s prvkami uživatelského rozhraní a databází aplikace.
 
 Metoda onCreate(): Tato metoda je volána při vytváření aktivity. Inicializuje rozložení, nastavuje toolbar, načítá poslední uložené ID obrázku z databáze a načte obrázek, pokud je k dispozici. Také nastavuje posluchače kliknutí pro tlačítka.
@@ -96,6 +100,7 @@ Navigace: Metoda onSupportNavigateUp() zajišťuje navigaci, když uživatel sti
 
 ______________________________________________________________________________________________
 **Zaver**
+
 Tento projekt me velmi bavil a jeho vysledek se mi dokonce i celkem libi.
 Nejvetsi problem byla asi databaze a porizovani obrazku jinak zbytek byl v klidu.
 
