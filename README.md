@@ -36,6 +36,7 @@ ________________________________________________________________________________
 **Technicka ukazka:**
 
 **MainActivity**
+
 Deklarace proměnných: Definuje proměnné pro ovládací prvky rozhraní (ListView, Button, TextView), správce databáze (DatabaseHelper) a další pomocné proměnné.
 
 Metoda onCreate(): Tato metoda se volá při vytváření aktivity. Zde se inicializuje uživatelské rozhraní (nastavení obsahu aktivity na layout z XML souboru), nastavuje toolbar a floating action button. Dále se volá metoda displayExpenses() pro zobrazení seznamu výdajů a nastavuje se posluchač pro tlačítko profilu.
