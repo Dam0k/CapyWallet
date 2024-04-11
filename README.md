@@ -31,6 +31,7 @@ Takto nejak vypada hlavni layout po nastaveni prijmu a pridani nejakych vydaju.
 Vydaje jdou take smazat jednoduse pomoci kliknuti na nejaky vydaj.
 Vsechny data zadane uzivatelem jsou ulozene do databaze.
 Vsechny vstupy jsou osetreny aby uzivatel nemohu zadat spatne nebo zadne hodnoty.
+Aplikace podporuje cestinu a anglictinu.
 
 _________________________________________________________________________________
 **Technicka ukazka:**
